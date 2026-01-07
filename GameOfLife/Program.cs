@@ -69,7 +69,7 @@ class Program
                 {
                     for (int y = 0; y < gridAlto; y++)
                     {
-                        grid[x, y] = 1;
+                        grid[x, y] = 0;
                     }
                 }
             }
@@ -96,12 +96,12 @@ class Program
                 int celX = (int)((mousePos.X - offsetX) / (tamanoCelda + espaciado));
                 int celY = (int)((mousePos.Y - offsetY) / (tamanoCelda + espaciado));
 
-                    // Dibujamos el Glider relativo a celX y celY
-                    grid[(celX + gridAncho + 1) % gridAncho, (celY + gridAlto + 0) % gridAlto] = 1;
-                    grid[(celX + gridAncho + 2) % gridAncho, (celY + gridAlto + 1) % gridAlto] = 1;
-                    grid[(celX + gridAncho + 0) % gridAncho, (celY + gridAlto + 2) % gridAlto] = 1;
-                    grid[(celX + gridAncho + 1) % gridAncho, (celY + gridAlto + 2) % gridAlto] = 1;
-                    grid[(celX + gridAncho + 2) % gridAncho, (celY + gridAlto + 2) % gridAlto] = 1;
+                // Dibujamos el Glider relativo a celX y celY
+                grid[(celX + gridAncho + 1) % gridAncho, (celY + gridAlto + 0) % gridAlto] = 1;
+                grid[(celX + gridAncho + 2) % gridAncho, (celY + gridAlto + 1) % gridAlto] = 1;
+                grid[(celX + gridAncho + 0) % gridAncho, (celY + gridAlto + 2) % gridAlto] = 1;
+                grid[(celX + gridAncho + 1) % gridAncho, (celY + gridAlto + 2) % gridAlto] = 1;
+                grid[(celX + gridAncho + 2) % gridAncho, (celY + gridAlto + 2) % gridAlto] = 1;
             }
 
             // Introduciendo el glider (gemini)
@@ -113,23 +113,23 @@ class Program
                 int celX = (int)((mousePos.X - offsetX) / (tamanoCelda + espaciado));
                 int celY = (int)((mousePos.Y - offsetY) / (tamanoCelda + espaciado));
 
-                    // Dibujamos el Glider relativo a celX y celY
-                    // Fila 0: El techo de la nave
-                    grid[(celX + gridAncho + 1) % gridAncho, (celY + gridAlto + 0) % gridAlto] = 1;
-                    grid[(celX + gridAncho + 2) % gridAncho, (celY + gridAlto + 0) % gridAlto] = 1;
-                    grid[(celX + gridAncho + 3) % gridAncho, (celY + gridAlto + 0) % gridAlto] = 1;
-                    grid[(celX + gridAncho + 4) % gridAncho, (celY + gridAlto + 0) % gridAlto] = 1;
+                // Dibujamos el Glider relativo a celX y celY
+                // Fila 0: El techo de la nave
+                grid[(celX + gridAncho + 1) % gridAncho, (celY + gridAlto + 0) % gridAlto] = 1;
+                grid[(celX + gridAncho + 2) % gridAncho, (celY + gridAlto + 0) % gridAlto] = 1;
+                grid[(celX + gridAncho + 3) % gridAncho, (celY + gridAlto + 0) % gridAlto] = 1;
+                grid[(celX + gridAncho + 4) % gridAncho, (celY + gridAlto + 0) % gridAlto] = 1;
 
-                    // Fila 1: Los laterales
-                    grid[(celX + gridAncho + 0) % gridAncho, (celY + gridAlto + 1) % gridAlto] = 1;
-                    grid[(celX + gridAncho + 4) % gridAncho, (celY + gridAlto + 1) % gridAlto] = 1;
+                // Fila 1: Los laterales
+                grid[(celX + gridAncho + 0) % gridAncho, (celY + gridAlto + 1) % gridAlto] = 1;
+                grid[(celX + gridAncho + 4) % gridAncho, (celY + gridAlto + 1) % gridAlto] = 1;
 
-                    // Fila 2: La base trasera
-                    grid[(celX + gridAncho + 4) % gridAncho, (celY + gridAlto + 2) % gridAlto] = 1;
+                // Fila 2: La base trasera
+                grid[(celX + gridAncho + 4) % gridAncho, (celY + gridAlto + 2) % gridAlto] = 1;
 
-                    // Fila 3: El morro y la parte inferior
-                    grid[(celX + gridAncho + 0) % gridAncho, (celY + gridAlto + 3) % gridAlto] = 1;
-                    grid[(celX + gridAncho + 3) % gridAncho, (celY + gridAlto + 3) % gridAlto] = 1;
+                // Fila 3: El morro y la parte inferior
+                grid[(celX + gridAncho + 0) % gridAncho, (celY + gridAlto + 3) % gridAlto] = 1;
+                grid[(celX + gridAncho + 3) % gridAncho, (celY + gridAlto + 3) % gridAlto] = 1;
 
             }
 
@@ -142,10 +142,15 @@ class Program
                 if (Raylib.IsMouseButtonDown(MouseButton.Left))
                 {
                     Vector2 mousePos = Raylib.GetMousePosition();
-                    if (mousePos.X - offsetX is > 0 and < gridTotalAncho && mousePos.Y - offsetY is > 0 and < gridTotalAlto)
+
+                    // Calcular coordenadas de celda
+                    int celX = (int)((mousePos.X - offsetX) / (tamanoCelda + espaciado));
+                    int celY = (int)((mousePos.Y - offsetY) / (tamanoCelda + espaciado));
+
+                    // Verificar que está dentro del grid
+                    if (celX is >= 0 and < gridAncho && celY is >= 0 and < gridAlto)
                     {
-                        Vector2 cel = new Vector2(mousePos.X - offsetX, mousePos.Y - offsetY) / (tamanoCelda + espaciado);
-                        grid[(int)cel.X, (int)cel.Y] = 1;
+                        grid[celX, celY] = 1;
                     }
                 }
 
@@ -154,10 +159,13 @@ class Program
                 if (Raylib.IsMouseButtonDown(MouseButton.Right))
                 {
                     Vector2 mousePos = Raylib.GetMousePosition();
-                    if (mousePos.X - offsetX is > 0 and < gridTotalAncho && mousePos.Y - offsetY is > 0 and < gridTotalAlto)
+
+                    int celX = (int)((mousePos.X - offsetX) / (tamanoCelda + espaciado));
+                    int celY = (int)((mousePos.Y - offsetY) / (tamanoCelda + espaciado));
+
+                    if (celX is >= 0 and < gridAncho && celY is >= 0 and < gridAlto)
                     {
-                        Vector2 cel = new Vector2(mousePos.X - offsetX, mousePos.Y - offsetY) / (tamanoCelda + espaciado);
-                        grid[(int)cel.X, (int)cel.Y] = 0;
+                        grid[celX, celY] = 0;
                     }
                 }
             }
@@ -269,7 +277,7 @@ class Program
             }
 
             Raylib.DrawText(
-                text:"Game of Life - Click izq: activa - Click der: desactiva - C: limpia el grid - R: aleatorio - V: modoEdad",
+                text:"Game of Life - Click izq: activa - Click der: desactiva - C: borrar - R: aleatorio - V: modoEdad",
                 posX:10,
                 posY:10,
                 fontSize:20,
